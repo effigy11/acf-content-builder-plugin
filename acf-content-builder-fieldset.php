@@ -2,7 +2,7 @@
 
 /*
 Advanced Custom Fields: Content Builder Fieldset
-Version:     0.0.1
+Version:     0.0.2
 Author:      EffigyLabs
 Author URI:  http://effigy.com.au
 Text Domain: effigylabs
