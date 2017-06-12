@@ -4,7 +4,7 @@
 Plugin Name: Advanced Custom Fields: Content Builder
 GitHub Plugin URI: https://github.com/effigy11/acf-content-builder-plugin
 Description: Create and manage custom content - Requires Advanced Custom Fields Plugin and Bootstrap
-Version:     0.0.2
+Version:     0.0.3
 Author:      EffigyLabs
 Author URI:  http://effigy.com.au
 License:     GPL2
