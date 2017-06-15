@@ -32,7 +32,7 @@ if ( ! defined( 'EFFLAB_CB_PLUGIN_URL' ) )
 |--------------------------------------------------------------------------
 */
 
-include_once( EFFLAB_CB_PLUGIN_URL . 'acf-content-builder-fieldset.php' );
+include_once( EFFLAB_CB_PLUGIN_URL . '/acf-content-builder-fieldset.php' );
  
 
 /*
