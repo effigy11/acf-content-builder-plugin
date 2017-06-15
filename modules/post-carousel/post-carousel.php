@@ -5,7 +5,9 @@ Advanced Custom Fields: Icon Boxes Module
 Description: Display icon boxes content
 */
 
-$newsCategory = get_sub_field('news_carousel');?>
+$newsCategory = get_sub_field('news_carousel');
+$categoryValue = $newsCategory['value'];
+$categoryLabel = str_replace(' ', '-', strtolower($newsCategory['label']));?>
 
 <!-- Section: Latest News -->
 <section id="news" class="section-small">

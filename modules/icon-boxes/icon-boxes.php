@@ -17,7 +17,15 @@ if( have_rows('icon_boxes') ):
 		$icon  = get_sub_field('icon');
 		$title = get_sub_field('title');
 		$text  = get_sub_field('text');
-		$link  = get_sub_field('link');
+		$links  = get_sub_field('link');
+		
+		if( $links ): 
+		    foreach( $links as $post): // variable must be called $post (IMPORTANT)
+		        setup_postdata($post);
+		        $link = get_permalink();
+		    endforeach;
+		    wp_reset_postdata(); // IMPORTANT - reset the $post object so the rest of the page works correctly
+		endif; 
 		
 		if( $counter == '3' || $counter == '6' ) {
 			$columnClass = 'col-md-4 col-sm-6';
@@ -35,7 +43,7 @@ if( have_rows('icon_boxes') ):
 		        <span class="icon_link_alt icon"></span>
 		    </div>
 		    <div class="media-body">
-		        <h3 class="title mt-none"><?php echo $title;?></h3>
+		        <a href="<?php echo $link;?>"><h3 class="title mt-none"><?php echo $title;?></h3></a>
 		        <p class="description"><?php echo $text;?></p>
 		    </div>
 		</div>

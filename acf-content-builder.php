@@ -4,7 +4,7 @@
 Plugin Name: Advanced Custom Fields: Content Builder
 GitHub Plugin URI: https://github.com/effigy11/acf-content-builder-plugin
 Description: Create and manage custom content - Requires Advanced Custom Fields Plugin and Bootstrap
-Version:     0.0.3
+Version:     0.0.4
 Author:      EffigyLabs
 Author URI:  http://effigy.com.au
 License:     GPL2
@@ -12,10 +12,35 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: effigylabs
 */
 
-// Include Content Builder Fieldset
-include_once( plugin_dir_path( __FILE__ ) . 'acf-content-builder-fieldset.php' );
 
-// Include Content Builder Backend Display
+/*
+|--------------------------------------------------------------------------
+| CONSTANTS
+|--------------------------------------------------------------------------
+*/
+ 
+if ( ! defined( 'EFFLAB_CB_BASE_FILE' ) )
+    define( 'EFFLAB_CB_BASE_FILE', __FILE__ );
+if ( ! defined( 'EFFLAB_CB_BASE_DIR' ) )
+    define( 'EFFLAB_CB_BASE_DIR', dirname( EFFLAB_CB_BASE_FILE ) );
+if ( ! defined( 'EFFLAB_CB_PLUGIN_URL' ) )
+    define( 'EFFLAB_CB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
+/*
+|--------------------------------------------------------------------------
+| INCLUDE CONTENT BUILDER FIELDSET
+|--------------------------------------------------------------------------
+*/
+
+include_once( EFFLAB_CB_PLUGIN_URL . 'acf-content-builder-fieldset.php' );
+ 
+
+/*
+|--------------------------------------------------------------------------
+| INCLUDE CONTENT BACKEND DISPLAY
+|--------------------------------------------------------------------------
+*/
+
 add_action('after_setup_theme', 'add_content_builder');
 function add_content_builder() {
 
@@ -63,10 +88,11 @@ function add_content_builder() {
     			        if( have_rows('columns') ) : 
     			        
     			        while( have_rows('columns') ) : the_row(); 
-    			            $width          = get_sub_field('column_width');
-    			            $last           = get_sub_field('last_column');
-    			            $contentType    = get_sub_field('choose_a_content_type');
-    			            $colCustomClass = get_sub_field('custom_class');
+    			            $width           = get_sub_field('column_width');
+    			            $last            = get_sub_field('last_column');
+    			            $contentType     = get_sub_field('choose_a_content_type');
+    			            $contentTypeSlug = str_replace(' ', '-', strtolower($contentType));
+    			            $colCustomClass  = get_sub_field('custom_class');
     			            $total_width += $width;
     			
     			        if ($total_width > 12) {
@@ -77,33 +103,35 @@ function add_content_builder() {
     			        
     			    <div class="col-md-<?php echo $width; ?> columns mb-lg <?php echo $colCustomClass; ?>">
     			    
-    			    	<?php if($contentType == 'Content'){
+    			    	<?php
+    			    
+    			    	/*
+    			    	|--------------------------------------------------------------------------
+    			    	| CHECK FOR TEMPLATE OVERRIDE
+    			    	|--------------------------------------------------------------------------
+    			    	*/
+    			    	 
+    			    	function efflab_cb_get_module_hierarchy( $contentType ) {
+    			    	 
+    			    	    // Check if a custom template exists in the theme folder, if not, load the plugin template file
+    			    	    if ( $module = locate_template( array( 'effigylabs/acf-content-builder/modules/'.$contentTypeSlug.'/'.$contentTypeSlug.'.php' ) ) ) {
+    			    	        $file = $module;
+    			    	    }
+    			    	    else {
+    			    	        $file = EFFLAB_CB_BASE_DIR . '/modules/'.$contentTypeSlug.'/'.$contentTypeSlug.'.php';
+    			    	    }
+    			    	    return $file ;
+    			    	}
     			    	
-    			    		   $content = dirname( __FILE__ ) . '/modules/content/content.php';
+    			    	/*
+    			    	|--------------------------------------------------------------------------
+    			    	| OUTPUT CONTENT
+    			    	|--------------------------------------------------------------------------
+    			    	*/
+    			    	 
+    			    	$content = efflab_cb_get_module_hierarchy( $contentType );
     			    		
-    			    	} elseif ($contentType == 'Gallery'){
-    			    		
-    			    			$content = dirname( __FILE__ ) . '/modules/gallery/gallery.php';
-    			    		
-    			    	} elseif ($contentType == 'Icon Boxes') {
-    			    	
-    			    			$content = dirname( __FILE__ ) . '/modules/icon-box/icon-box.php';
-    			    							    		
-    					} elseif ( $contentType == 'Accordion' ) {
-    					
-    							$content = dirname( __FILE__ ) . '/modules/accordian/accordian.php';
-    																	    		
-    					} elseif ( $contentType == 'News Carousel' ) {
-    					
-    							$content = dirname( __FILE__ ) . '/modules/post-carousel/post-carousel.php';
-    											    		
-    					} elseif ( $contentType == 'Publication' ) {
-    					
-    							$content = dirname( __FILE__ ) . '/modules/publication/publication.php';
-    											    		
-    					} else {
-    			    	  // Nothing set yet
-    			    	} ?>
+    			    	?>
     			        
     			    </div>
     			    
