@@ -5,8 +5,24 @@ Advanced Custom Fields: Icon Boxes Module
 Description: Display icon boxes content
 */
 
+// Get Icon Boxes Style;
+$iconBoxStyle = get_sub_field('icon_box_style');
+$iconHoverEffect = get_sub_field('icon_hover_effect');
+
+
 if( have_rows('icon_boxes') ):
 // Get count of Icon Boxes;
+	
+	//var_dump($iconBoxStyle);
+	
+	if($showContentBlockTitle && $moveContentBlockTitle ){ ?>
+		<header>
+		    <h2 class="mb-sm"><?php echo $contentBlockTitle; ?></h2>
+		</header>
+	<?php }
+
+	echo '<div class="featured-boxes featured-boxes-style-'.$iconBoxStyle.'">';
+	echo '<div class="row">';
 
 	$counter = 0;
 	while( have_rows( 'icon_boxes' ) ): the_row(); 
@@ -32,24 +48,36 @@ if( have_rows('icon_boxes') ):
 		} elseif( $counter == '5' ) {
 			$columnClass = 'col-md-3 col-sm-6';
 		} else { // $counter = 4
-			$columnClass = 'col-md-6 col-sm-6';
+			$columnClass = 'col-md-3 col-sm-6';
 		}
 	?>
 	
-	<div class="<?php echo $columnClass;?> more-feature">
-		<div class="media">
-		    <div class="media-left">
-		    	<i class="fa fa-2x <?php echo $icon; ?>" aria-hidden="true"></i>
-		        <span class="icon_link_alt icon"></span>
-		    </div>
-		    <div class="media-body">
-		        <a href="<?php echo $link;?>"><h3 class="title mt-none"><?php echo $title;?></h3></a>
-		        <p class="description"><?php echo $text;?></p>
-		    </div>
+	<div class="<?php echo $columnClass;?>">
+	
+		<div class="featured-box featured-box-primary featured-box-effect-<?php echo $iconHoverEffect ;?>">
+			<div class="box-content">
+				<a href="<?php echo $link;?>">
+					<i class="icon-featured fa <?php echo $icon; ?>" aria-hidden="true"></i>
+					<span class="icon_link_alt icon"></span>
+				</a>
+				<a href="<?php echo $link;?>"><h4><?php echo $title;?></h4></a>
+				<?php if($iconBoxStyle = 4){
+					echo '<div class="divider divider-small divider-small-center">';
+					echo '<hr>';
+					echo '</div>';
+				}?>
+				<p><?php echo $text;?></p>
+			</div>
 		</div>
+		
 	</div>
 
 	<?php endwhile; 
 	
+	echo '</div>';
+	echo '</div>';
+	
 endif; 
 ?>
+
+
