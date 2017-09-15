@@ -21,6 +21,34 @@ if ( ! defined( 'EFFLAB_CB_PLUGIN_URL' ) )
     define( 'EFFLAB_CB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
     
     
+
+// 1. customize ACF path
+add_filter('acf/settings/path', 'efflab_acf_settings_path');
+function efflab_acf_settings_path( $path ) {
+    // update path
+    $path = EFFLAB_CB_PLUGIN_URL . '/acf/';
+    // return
+    return $path;
+}
+ 
+// 2. customize ACF dir
+add_filter('acf/settings/dir', 'efflab_acf_settings_dir');
+function efflab_acf_settings_dir( $dir ) {
+    // update path
+    $dir = EFFLAB_CB_PLUGIN_URL . '/acf/';
+    // return
+    return $dir;
+}
+ 
+// 3. Hide ACF field group menu item
+add_filter('acf/settings/show_admin', '__return_false');
+
+// 4. Include ACF
+include_once( EFFLAB_CB_PLUGIN_URL . '/acf/acf.php' );
+
+
+    
+    
 add_action( 'plugins_loaded', 'load_content_builder_cpts' );
 function load_content_builder_cpts() {
 
