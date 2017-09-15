@@ -1,5 +1,94 @@
 <?php if( function_exists('acf_add_local_field_group') ):
 
+
+acf_add_local_field( array (
+	'parent' => 'field_589c4727da2e9',
+	'key' => 'field_58e1b59c2e8f7b',
+	'label' => 'Icon Box Style',
+	'name' => 'icon_box_style',
+	'type' => 'select',
+	'instructions' => 'Select a style for the icon boxes.',
+	'required' => 0,
+	'conditional_logic' => array (
+		array (
+			array (
+				'field' => 'field_58e19e145b3e1',
+				'operator' => '==',
+				'value' => 'Icon Boxes',
+			),
+		),
+	),
+	'wrapper' => array (
+		'width' => '50',
+		'class' => '',
+		'id' => '',
+	),
+	'choices' => array (
+		8 => 'Style 8',
+		7 => 'Style 7',
+		6 => 'Style 6',
+		5 => 'Style 5',
+		4 => 'Style 4',
+		3 => 'Style 3',
+		2 => 'Style 2',
+		1 => 'Style 1',
+	),
+	'default_value' => array (
+		0 => 2,
+	),
+	'allow_null' => 0,
+	'multiple' => 0,
+	'ui' => 0,
+	'ajax' => 0,
+	'return_format' => 'value',
+	'placeholder' => '',
+));
+
+
+acf_add_local_field( array (
+	'parent' => 'field_589c4727da2e9',
+	'key' => 'field_58e1b59c2e8f7c',
+	'label' => 'Icon Hover Effect',
+	'name' => 'icon_hover_effect',
+	'type' => 'select',
+	'instructions' => 'Select an icon hover effect.',
+	'required' => 0,
+	'conditional_logic' => array (
+		array (
+			array (
+				'field' => 'field_58e19e145b3e1',
+				'operator' => '==',
+				'value' => 'Icon Boxes',
+			),
+		),
+	),
+	'wrapper' => array (
+		'width' => '50',
+		'class' => '',
+		'id' => '',
+	),
+	'choices' => array (
+		8 => 'Effect 8',
+		7 => 'Effect 7',
+		6 => 'Effect 6',
+		5 => 'Effect 5',
+		4 => 'Effect 4',
+		3 => 'Effect 3',
+		2 => 'Effect 2',
+		1 => 'Effect 1',
+	),
+	'default_value' => array (
+		0 => 4,
+	),
+	'allow_null' => 0,
+	'multiple' => 0,
+	'ui' => 0,
+	'ajax' => 0,
+	'return_format' => 'value',
+	'placeholder' => '',
+));
+
+
 acf_add_local_field( array (
 	'parent' => 'field_589c4727da2e9',
 	'key' => 'field_58e1b3f3e36a9',
@@ -797,7 +886,3 @@ acf_add_local_field( array (
 endif;
 
 ?>
-
-
-
-		

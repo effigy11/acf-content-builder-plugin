@@ -19,8 +19,13 @@ if( have_rows('icon_boxes') ):
 		<header>
 		    <h2 class="mb-sm"><?php echo $contentBlockTitle; ?></h2>
 		</header>
-	<?php }
+	<?php $topborder = 'top-border'; ?>
+		
+	<?php } ?>
+	
+	<div class="<?php echo $topborder; ?> pt-lg">
 
+	<?php 
 	echo '<div class="featured-boxes featured-boxes-style-'.$iconBoxStyle.'">';
 	echo '<div class="row">';
 
@@ -74,8 +79,9 @@ if( have_rows('icon_boxes') ):
 
 	<?php endwhile; 
 	
-	echo '</div>';
-	echo '</div>';
+	echo '</div>'; // /.row
+	echo '</div>'; // /.featured-boxes
+	echo '</div>'; // /.topborder
 	
 endif; 
 ?>
