@@ -2,7 +2,6 @@
 
 /*
 Plugin Name: Advanced Custom Fields: Custom Post Types
-GitHub Plugin URI: https://github.com/effigy11/acf-cpts-plugin
 Description: Create and manage custom post types - Requires Advanced Custom Fields Plugin
 Version:     1.1.2
 Author:      EffigyLabs
@@ -11,7 +10,6 @@ License:     GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: effigylabs
 */
-
 
 add_action('plugins_loaded', 'init_acf_options');
 
