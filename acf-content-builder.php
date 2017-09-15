@@ -1,7 +1,7 @@
 <?php 
 
 /*
-Plugin Name: Advanced Custom Fields: Content Builder
+Plugin Name: EffigyLabs Content Builder
 GitHub Plugin URI: https://github.com/effigy11/acf-content-builder-plugin
 Description: Create and manage custom content - Requires Advanced Custom Fields Plugin and Bootstrap
 Version:     0.0.5
@@ -46,8 +46,10 @@ add_filter('acf/settings/show_admin', '__return_false');
 // 4. Include ACF
 include_once( 'acf/acf.php' );
 
+// Load ACF CPT PLUGIN
+include_once( 'acf-cpts-plugin/acf-cpts.php' );
     
-    
+
 add_action( 'plugins_loaded', 'load_content_builder_cpts' );
 function load_content_builder_cpts() {
 
