@@ -7,13 +7,7 @@ Description: Display Accordian content
 
 if( have_rows('accordion') ): ?>
 
-	<?php if($showContentBlockTitle && $moveContentBlockTitle ){ ?>
-		<header>
-		    <h2 class="mb-sm"><?php echo $contentBlockTitle; ?></h2>
-		</header>
-	<?php } ?>
-
-	<!-- Panels -->
+    <!-- Panels -->
 	<div class="panel-group" id="accordion">
 
 	<?php // Start count of accordion items;
@@ -58,8 +52,8 @@ if( have_rows('accordion') ): ?>
 	<?php $counter++; ?>
 	<?php endwhile; ?>
 	
-	</div>
 	<!-- /Panels -->
+	</div>
 
 <?php endif; 
 ?>
