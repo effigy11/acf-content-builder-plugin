@@ -35,7 +35,7 @@ function efflab_acf_settings_path( $path ) {
 add_filter('acf/settings/dir', 'efflab_acf_settings_dir');
 function efflab_acf_settings_dir( $dir ) {
     // update path
-    $dir = EFFLAB_CB_PLUGIN_URL . '/acf/';
+    $dir = EFFLAB_CB_PLUGIN_URL . 'acf/';
     // return
     return $dir;
 }
@@ -44,8 +44,7 @@ function efflab_acf_settings_dir( $dir ) {
 add_filter('acf/settings/show_admin', '__return_false');
 
 // 4. Include ACF
-include_once( EFFLAB_CB_PLUGIN_URL . '/acf/acf.php' );
-
+include_once( 'acf/acf.php' );
 
     
     
