@@ -1,4 +1,4 @@
-# acf-content-builder-plugin
+# ACF CONTENT BUILDER PLUGIN
 A Wordpress Content Builder based on ACF
 
 
