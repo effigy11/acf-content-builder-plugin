@@ -21,7 +21,6 @@ if ( ! defined( 'EFFLAB_CB_PLUGIN_URL' ) )
     define( 'EFFLAB_CB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
     
     
-
 // 1. customize ACF path
 add_filter('acf/settings/path', 'efflab_acf_settings_path');
 function efflab_acf_settings_path( $path ) {
