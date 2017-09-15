@@ -67,6 +67,7 @@ function list_all_cpts() {
 	  $get_acf_cpt['param'] = 'post_type';
 	  $get_acf_cpt['operator'] = '==';
 	  $get_acf_cpt['value'] = $post_type;
+	  $display_acf_location = array();
 	  $display_acf_location[] = $get_acf_cpt;
 	  $acf_location[] = $display_acf_location;
 	}
