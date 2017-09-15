@@ -11,7 +11,8 @@ Add `<?php do_action('content_builder'); ?>` with your template loop to display 
 ### Override Defaults:
 
 Copy a module from the modules directory to your theme directory with the following structure
-your-theme/effigylabs/acf-content-builder/modules
+
+`your-theme/effigylabs/acf-content-builder/modules/module-you-want-to-override/`
 
 Make changes to the copied files
 
@@ -20,4 +21,5 @@ Make changes to the copied files
 ### Custom Modules:
 
 Create a custom module in your theme directory with the following structure
-effigylabs/acf-content-builder/modules
+
+`your-theme/effigylabs/acf-content-builder/modules/your-custom-module/`
