@@ -12,7 +12,6 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: effigylabs
 */
 
-
 //  DECLARE CONSTANTS
 if ( ! defined( 'EFFLAB_CB_BASE_FILE' ) )
     define( 'EFFLAB_CB_BASE_FILE', __FILE__ );
@@ -20,14 +19,131 @@ if ( ! defined( 'EFFLAB_CB_BASE_DIR' ) )
     define( 'EFFLAB_CB_BASE_DIR', dirname( EFFLAB_CB_BASE_FILE ) );
 if ( ! defined( 'EFFLAB_CB_PLUGIN_URL' ) )
     define( 'EFFLAB_CB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+    
+    
+add_action( 'plugins_loaded', 'load_content_builder_cpts' );
+function load_content_builder_cpts() {
+
+    // GET CONTENT BUILDER CPTS
+    // FROM PLUGIN AND THEME
+    echo efflab_cb_get_module_cpts();
+    
+}
+
+function list_all_cpts() {
+	
+	$post_types = get_post_types( array( 'public' => true ) , 'names' );
+	
+	foreach( $post_types as $post_type => $value) {
+	  $display_acf_location = '';
+	  $get_acf_cpt['param'] = 'post_type';
+	  $get_acf_cpt['operator'] = '==';
+	  $get_acf_cpt['value'] = $post_type;
+	  $display_acf_location[] = $get_acf_cpt;
+	  $acf_location[] = $display_acf_location;
+	}
+	
+    //var_dump($acf_location);
+    return $acf_location;
+}
 
 
-// INCLUDE DEFAULT CONTENT BUILDER FIELDSET
-include_once( EFFLAB_CB_BASE_DIR . '/acf-content-builder-fieldset.php' );
+function list_all_module_names() {
+	
+	$pluginModuleArray = efflab_cb_get_plugin_module_slugs();
+	$themeModuleArray = efflab_cb_get_theme_module_slugs();
+	
+	// See if there is a matching module in theme
+	$matchedModules = array_intersect( $themeModuleArray, $pluginModuleArray ); 
+	$themeOnlyModules = array_diff( $themeModuleArray, $matchedModules );
+	$pluginOnlyModules = array_diff( $pluginModuleArray, $matchedModules );
+	
+	$modules = array_merge( $pluginOnlyModules, $themeOnlyModules, $matchedModules);
+	
+	foreach( $modules as $module ) {
+	  $module = str_replace('-', ' ', $module);
+	  $moduleName = ucwords($module);	
+	  $get_all_modules[$moduleName] = $moduleName;
+	  $display_module_names[] = $get_all_modules;
+	}
+	
+    //var_dump($get_all_modules);
+    return $get_all_modules;
+}
 
 
-// GET CUSTOM CONTENT BUILDER FIELDSETS
-echo efflab_cb_get_module_fieldset();
+
+add_action( 'wp_loaded', 'load_content_builder' );
+function load_content_builder() {
+
+	// Get List of CPTS for inclusion in 
+	// acf-content-builder-fieldset.php
+	list_all_cpts();
+	list_all_module_names();
+	
+    // INCLUDE DEFAULT CONTENT BUILDER FIELDSET
+    include_once( EFFLAB_CB_BASE_DIR . '/acf-content-builder-fieldset.php' );
+    
+    // ADD IN CONTENT BUILDER FIELDSETS 
+    // FROM PLUGIN AND THEME
+    echo efflab_cb_get_module_fieldset();
+    
+}
+
+
+// CHECK FOR FIELDSETS IN TEMPLATE OVERRIDE
+function efflab_cb_get_module_cpts() {
+
+    $pluginModuleArray = efflab_cb_get_plugin_module_slugs();
+    $themeModuleArray = efflab_cb_get_theme_module_slugs();
+    
+    // See if there is a matching module in theme
+    $matchedModules = array_intersect( $themeModuleArray, $pluginModuleArray ); 
+    $themeOnlyModules = array_diff( $themeModuleArray, $matchedModules );
+    $pluginOnlyModules = array_diff( $pluginModuleArray, $matchedModules );
+    
+    //print_r( $matchedModules );
+    //print_r( $themeOnlyModules );
+    //print_r( $pluginOnlyModules );
+    
+	if( $matchedModules ){
+	
+		foreach ( $matchedModules as $matchedModule ) {
+			// A match was found check if a custom fieldset exists in theme direcory
+			if( file_exists( get_stylesheet_directory().'/effigylabs/acf-content-builder/modules/'.$matchedModule.'/'.$matchedModule.'-cpt.php' ) ) {
+				include_once get_stylesheet_directory().'/effigylabs/acf-content-builder/modules/'.$matchedModule.'/'.$matchedModule.'-cpt.php';
+			} 
+			// Else check if a fieldset exists in module directory
+			elseif( file_exists( EFFLAB_CB_BASE_DIR .'/modules/'.$matchedModule.'/'.$matchedModule.'-cpt.php' ) ) {
+				include_once EFFLAB_CB_BASE_DIR .'/modules/'.$matchedModule.'/'.$matchedModule.'-cpt.php';
+			} //endif
+		}// end foreach
+
+	}  // endif
+	
+	if ( $themeOnlyModules ) {
+	
+		foreach ( $themeOnlyModules as $themeOnlyModule ) {
+			// No match was found get file from theme direcory
+			if( file_exists( get_stylesheet_directory().'/effigylabs/acf-content-builder/modules/'.$themeOnlyModule.'/'.$themeOnlyModule.'-cpt.php' ) ) {
+				include_once get_stylesheet_directory().'/effigylabs/acf-content-builder/modules/'.$themeOnlyModule.'/'.$themeOnlyModule.'-cpt.php';
+			}//endif
+		}// end foreach
+		
+	}  // endif
+	
+	if ( $pluginOnlyModules ) {
+	
+		foreach ( $pluginOnlyModules as $pluginOnlyModule ) {
+			// No matches found get file from plugin direcory
+			if( file_exists( EFFLAB_CB_BASE_DIR .'/modules/'.$pluginOnlyModule.'/'.$pluginOnlyModule.'-cpt.php' ) ) {
+				include_once EFFLAB_CB_BASE_DIR .'/modules/'.$pluginOnlyModule.'/'.$pluginOnlyModule.'-cpt.php';
+			} //endif
+		}// end foreach
+		
+	} // endif
+}
+
 
 
 function efflab_cb_get_plugin_module_slugs() {
@@ -39,8 +155,7 @@ function efflab_cb_get_plugin_module_slugs() {
 	if($pluginModules){
 	    $pluginModuleArray = [];
 	    foreach ($pluginModules as $pluginModule ) {
-	    	$urlParts = explode("/", $pluginModule);
-	    	$pluginMod = $urlParts[7];
+	    	$pluginMod = basename( $pluginModule );
 	    	$pluginModuleArray[] = $pluginMod;
 	    }// end foreach
 	    //print_r($pluginModuleArrary);
@@ -58,9 +173,8 @@ function efflab_cb_get_theme_module_slugs() {
 	if($themeModules){
 	$themeModuleArray = [];
 		foreach ($themeModules as $themeModule ) {
-			$urlParts = explode("/", $themeModule);
-			$contentTypeSlug = $urlParts[9];
-			$themeModuleArray[] = $contentTypeSlug;
+			$pluginMod = basename( $themeModule );
+			$themeModuleArray[] = $pluginMod;
 		}// end foreach
 		//print_r($themeModuleArrary);
 	} // endif
@@ -89,11 +203,11 @@ function efflab_cb_get_module_fieldset() {
 		foreach ( $matchedModules as $matchedModule ) {
 			// A match was found check if a custom fieldset exists in theme direcory
 			if( file_exists( get_stylesheet_directory().'/effigylabs/acf-content-builder/modules/'.$matchedModule.'/'.$matchedModule.'-fieldset.php' ) ) {
-				include get_stylesheet_directory().'/effigylabs/acf-content-builder/modules/'.$matchedModule.'/'.$matchedModule.'-fieldset.php';
+				include_once get_stylesheet_directory().'/effigylabs/acf-content-builder/modules/'.$matchedModule.'/'.$matchedModule.'-fieldset.php';
 			} 
 			// Else check if a fieldset exists in module directory
 			elseif( file_exists( EFFLAB_CB_BASE_DIR .'/modules/'.$matchedModule.'/'.$matchedModule.'-fieldset.php' ) ) {
-				include EFFLAB_CB_BASE_DIR .'/modules/'.$matchedModule.'/'.$matchedModule.'-fieldset.php';
+				include_once EFFLAB_CB_BASE_DIR .'/modules/'.$matchedModule.'/'.$matchedModule.'-fieldset.php';
 			} //endif
 		}// end foreach
 
@@ -104,7 +218,7 @@ function efflab_cb_get_module_fieldset() {
 		foreach ( $themeOnlyModules as $themeOnlyModule ) {
 			// A match was found check if a custom fieldset exists in theme direcory
 			if( file_exists( get_stylesheet_directory().'/effigylabs/acf-content-builder/modules/'.$themeOnlyModule.'/'.$themeOnlyModule.'-fieldset.php' ) ) {
-				include get_stylesheet_directory().'/effigylabs/acf-content-builder/modules/'.$themeOnlyModule.'/'.$themeOnlyModule.'-fieldset.php';
+				include_once get_stylesheet_directory().'/effigylabs/acf-content-builder/modules/'.$themeOnlyModule.'/'.$themeOnlyModule.'-fieldset.php';
 			}//endif
 		}// end foreach
 		
@@ -115,7 +229,7 @@ function efflab_cb_get_module_fieldset() {
 		foreach ( $pluginOnlyModules as $pluginOnlyModule ) {
 			// A match was found check if a custom fieldset exists in theme direcory
 			if( file_exists( EFFLAB_CB_BASE_DIR .'/modules/'.$pluginOnlyModule.'/'.$pluginOnlyModule.'-fieldset.php' ) ) {
-				include EFFLAB_CB_BASE_DIR .'/modules/'.$pluginOnlyModule.'/'.$pluginOnlyModule.'-fieldset.php';
+				include_once EFFLAB_CB_BASE_DIR .'/modules/'.$pluginOnlyModule.'/'.$pluginOnlyModule.'-fieldset.php';
 			} //endif
 		}// end foreach
 		
@@ -180,6 +294,17 @@ function add_content_builder() {
     			<?php } ?>
     			
     			<div class="row">
+    			
+    				<?php if($showContentBlockTitle && $moveContentBlockTitle ): ?>
+    				
+    					<div class="col-md-12">
+    						<header>
+    					    	<h2 class="mb-sm"><?php echo $contentBlockTitle; ?></h2>
+    						</header>
+    					</div>
+    					
+    				<?php endif; ?>	
+    				
     			    <?php 
     			        $total_width = 0;
     			        if( have_rows('columns') ) : 
@@ -228,5 +353,6 @@ function add_content_builder() {
     <?php endif; 
     
 }
+
 
 ?>
